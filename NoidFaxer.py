@@ -3,9 +3,12 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.image import MIMEImage
 from email.mime.application import MIMEApplication
 from email.mime.text import MIMEText
+import json
 
-FROM = 'finesir6969@gmail.com'
-PASS = 'lelelelele'
+with open('credentials.json') as f:
+    CREDENTIALS = json.loads(f.read())['email']
+FROM = CREDENTIALS['user']
+PASS = CREDENTIALS['pass']
 
 def sign_in(): #signs into finesir6969's email, returns email obj
     mail = smtplib.SMTP('smtp.gmail.com',587)
