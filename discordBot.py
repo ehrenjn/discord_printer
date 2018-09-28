@@ -117,39 +117,3 @@ async def on_message(mess): #fired when there is a message
 
 
 bot.run(TOKEN) #login and start the bot
-
-
-
-"""
-@bot.event #pass on_message corutine to bot's message event listener
-async def on_message(mess): #fired when there is a message
-    print("recieved message")
-    if mess.channel.name == 'noid-pipeline':
-        links = mess.attachments + mess.embeds #combine links and direct file transfers
-        for link_data in links: #go through all the links, fax them if possible
-            if 'type' in link_data and link_data['type'] == 'image': #if a link to an image
-                print('LINK')
-                fax(link_data['url'])
-            elif 'width' in link_data: #if an image file
-                print('FILE')
-                fax(link_data['url'])
-"""
-
-"""
-def call_corutine(call): #BLOCKING, I can only use await inside a corutine itself so I can use this to more simply call corutines
-    asyncio.get_event_loop().run_until_complete(call)
-"""
-
-"""
-def save_and_resize(data): #saves the data to 'NoidFaxImg.png' and resizes it so it can be printed
-    f = open(IMG_FILE, 'wb')
-    f.write(data)
-    f.close()
-    i = Image.open(IMG_FILE)
-    w2, h2 = (i.width, i.height)
-    while w2 < 800 or w2 < 800: #just keep doubling it until its good (I HAVE ACTUALLY CONFIRMED THAT IT WILL PRINT AN 800X800 IMAGE)
-        w2 *= 2
-        h2 *= 2
-    i = i.resize((w2,h2))
-    i.save(IMG_FILE)
-"""

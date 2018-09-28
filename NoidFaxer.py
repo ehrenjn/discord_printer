@@ -36,28 +36,3 @@ def send_mail(to, text = None, file_loc = None, subject = "GOOD CONTENT"):
         msg.attach(mime_file(file_loc))
     mail.sendmail(FROM, to, msg.as_string())
     mail.close()
-
-
-
-
-'''
-def send_file(file_loc, to):
-    mail = sign_in()
-    mail.sendmail(FROM, to, mime_encode(to, file_loc, 'WIN'))
-    mail.close()
-'''
-
-'''
-def mime_encode(to, file_loc, text):
-    msg = MIMEMultipart()
-    msg['Subject'] = 'File transfer'
-    msg['From'] = FROM
-    msg['To'] = to
-    with open(file_loc, 'rb') as f:
-        attatchment = MIMEApplication(f.read())
-        file_name = f.name.split('\\')[-1]
-        attatchment['Content-Disposition'] = 'attachment; filename="{}"'.format(fileName)
-        msg.attach(attatchment)
-    msg.attach(MIMEText(text, 'text'))
-    return msg.as_string()
-'''
