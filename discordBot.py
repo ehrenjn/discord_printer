@@ -57,7 +57,7 @@ def save_and_resize(data): #saves the data to 'NoidFaxImg.png' and resizes it so
     return path
 
 async def say(mess, channel):
-    await bot.send_message(channel, "`" + mess + "`")
+    await channel.send("`" + mess + "`")
 
 async def fax_image(url, channel): #faxes the image at url to the noid, communicates to user on channel
     for attempt in range(2): #try to download the data twice
