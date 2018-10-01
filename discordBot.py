@@ -51,10 +51,14 @@ def save_and_resize(data): #saves the data to 'NoidFaxImg.png' and resizes it so
     f = open(path, 'wb')
     f.write(data)
     f.close()
-    i = Image.open(path)
-    i = i.resize((950,1400))
-    i.save(path)
-    return path
+    success = True
+    try:
+        i = Image.open(path)
+        i = i.resize((950,1400))
+        i.save(path)
+    except:
+        success = False
+    return path, success
 
 async def say(mess, channel):
     await channel.send("`" + mess + "`")
@@ -65,11 +69,15 @@ async def fax_image(url, channel): #faxes the image at url to the noid, communic
         if data: #if image data was succesfully found
             print(url)
             await say("Got image data! Resizing image...", channel)
-            f_path = save_and_resize(data)
-            await say("Resized, faxing...", channel)
-            noid.send_mail(ADDRESS, file_loc = f_path)
-            os.remove(f_path)
-            await say("Payload delivered, may god help us all.", channel)
+            f_path, success = save_and_resize(data)
+            if success: #if image was resized properly
+                await say("Resized, faxing...", channel)
+                noid.send_mail(ADDRESS, file_loc = f_path)
+                await say("Payload delivered, may god help us all.", channel)
+            else:
+                print("image couldn't be resized, not faxing")
+                await say("Error: couldn't resize image.")
+            os.remove(f_path) #path is always made even if image wasn't resized, better delete that
             break #don't retry
         else: #if image data was not found
             error = "Error: Could not get image data from " + url
