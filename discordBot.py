@@ -106,9 +106,9 @@ async def on_message(mess): #fired when there is a message
         print(mess.content)
         mess_text = mess.content
         for link_data in mess.attachments: #go through all the links, fax them if possible
-            if 'width' in link_data: #if an image file
+            if hasattr(link_data, 'width'): #if an image file
                 print('FILE')
-                await fax_image(link_data['url'], mess.channel)
+                await fax_image(link_data.url, mess.channel)
         for url in links_in(mess.content):
             mess_text = mess_text.replace(url, '') #remove url from text
             await fax_image(url, mess.channel) #we'll check if it's an actual image later
