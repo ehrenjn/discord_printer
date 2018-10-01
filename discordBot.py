@@ -76,7 +76,7 @@ async def fax_image(url, channel): #faxes the image at url to the noid, communic
                 await say("Payload delivered, may god help us all.", channel)
             else:
                 print("image couldn't be resized, not faxing")
-                await say("Error: couldn't resize image.")
+                await say("Error: couldn't resize image.", channel)
             os.remove(f_path) #path is always made even if image wasn't resized, better delete that
             break #don't retry
         else: #if image data was not found
