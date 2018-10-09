@@ -107,21 +107,30 @@ async def fax_text(text, channel):
         await say("Message added to queue ({}/50 lines)".format(num_lines), channel)
     print("TEXT: ", text)
 
-@bot.event #pass on_message corutine to bot's message event listener
+async def fax_message(mess):
+    mess_text = mess.content
+    for link_data in mess.attachments: #go through all the links, fax them if possible
+        if hasattr(link_data, 'width'): #if an image file
+            print('FILE')
+            await fax_image(link_data.url, mess.channel)
+    for url in links_in(mess.content):
+        mess_text = mess_text.replace(url, '') #remove url from text
+        await fax_image(url, mess.channel) #we'll check if it's an actual image later
+    if mess_text != '':
+        await fax_text(mess_text, mess.channel)
+    
+@bot.event
 async def on_message(mess): #fired when there is a message
     if mess.channel.name == 'noid-pipeline' and mess.author.id != bot.user.id: #if its the correct channel and not it's own message
         print("Recieved message")
         print(mess.content)
-        mess_text = mess.content
-        for link_data in mess.attachments: #go through all the links, fax them if possible
-            if hasattr(link_data, 'width'): #if an image file
-                print('FILE')
-                await fax_image(link_data.url, mess.channel)
-        for url in links_in(mess.content):
-            mess_text = mess_text.replace(url, '') #remove url from text
-            await fax_image(url, mess.channel) #we'll check if it's an actual image later
-        if mess_text != '':
-            await fax_text(mess_text, mess.channel)
+        await fax_message(mess)
+
+@bot.event
+async def on_reaction_add(reaction, user):
+    if reaction.emoji == '\U0001f4e0':
+        print("fax emoji detected")
+        await fax_message(reaction.message)
 
 
 bot.run(TOKEN) #login and start the bot
